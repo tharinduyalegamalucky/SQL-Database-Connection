@@ -1,0 +1,48 @@
+
+import android.os.StrictMode;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+
+public class DatabaseConnection {
+    private static DatabaseConnection databaseConnection = new DatabaseConnection();
+    private static Connection connection;
+
+    public static DatabaseConnection getDatabaseConnection() {
+        return databaseConnection;
+    }
+
+    public static Connection getConnection() {
+
+        try {
+            if (connection == null || connection.isClosed()) {
+
+                  String connection_ip = "(live server address)";
+//                String connection_ip = "";
+
+
+
+                String database = "database_table_name";
+                String username = "sa";
+                String password = "123";
+                String Classes = "net.sourceforge.jtds.jdbc.Driver";
+                String connection_url = "jdbc:jtds:sqlserver://" + connection_ip + ";databaseName=" + database+";user="+username+";password="+password+";";
+
+                StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+                StrictMode.setThreadPolicy(policy);
+
+                try {
+                    Class.forName(Classes);
+                    connection = DriverManager.getConnection(connection_url);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return connection;
+    }
+}
